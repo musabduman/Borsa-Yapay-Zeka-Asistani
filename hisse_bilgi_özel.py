@@ -14,7 +14,7 @@ import io
 sys.stdout.reconfigure(encoding='utf-8')
 warnings.filterwarnings('ignore')
 
-GOOGLE_API_KEY=""
+GOOGLE_API_KEY=" Buraya gemini apı keyinizi yazınız" 
 
 client = genai.Client(api_key=GOOGLE_API_KEY)
 pd.options.display.float_format = '{:.2f}'.format
@@ -139,10 +139,11 @@ def calcu_pivot(df):
     df['S1'] = (2 * df['Pivot']) - df['High']
     return df
 
-def muhasebeci(df):
+def muhasebeci(hisse):
+    df_muhasebeci = hisse.history(period="4y")
     try:
         bot = borsa_muhasebe()
-        sonuc = bot.analiz_et(df)
+        sonuc = bot.analiz_et(df_muhasebeci)
         return f"AI modeli %{sonuc['güven']} ihtimalle {sonuc['yon']} bekliyor."
     except Exception as e:
         return f"Hata: {e}"
@@ -288,7 +289,7 @@ def main():
             try:
                 df=teknik_analiz(df)
                 temel=temel_veriler(hisse)
-                ai_rapor=muhasebeci(df)
+                ai_rapor=muhasebeci(hisse)
                 haberler_listesi=haber_verileri(sembol)
                 df.index = df.index.tz_localize(None)
                 df_export = df.drop(["Dividends", "Stock Splits", "Volume"], axis=1, errors="ignore")
@@ -323,7 +324,7 @@ def main():
             try:
                 hisse=yf.Ticker(sembol)
                 df=hisse.history(period="1y")
-                ai_rapor=muhasebeci(df)
+                ai_rapor=muhasebeci(hisse)
                 if df.empty: continue
                 df=teknik_analiz(df)
                 durum, sinyal=sinyal_kontrol(df)
@@ -359,7 +360,7 @@ def main():
         hisse,sembol,df=input_alma()
         tr_map = str.maketrans("ığüşöçİĞÜŞÖÇ", "igusocIGUSOC")
         sembol = sembol.translate(tr_map).upper()
-        ai_rapor1=muhasebeci(df)
+        ai_rapor1=muhasebeci(hisse)
         print(ai_rapor1)
     elif soru=="4":
         print("\n🚀 MEGA TARAMA MODU BAŞLATILIYOR (Sadece Yerel Yapay Zeka)")
