@@ -12,11 +12,10 @@ Bu proje, Borsa İstanbul (BIST) verilerini çekerek teknik ve temel analiz veri
 ## 🛠️ Kurulum
 
 Gerekli kütüphaneleri yüklemek için:
-
-```bash
-pip install -r requirements.txt
-
 ⚠️ Yasal Uyarı
 Burada yer alan bilgi, yorum ve tavsiyeler Yatırım Danışmanlığı kapsamında değildir. Yapay zeka tarafından üretilen içerikler hata barındırabilir. Yatırım kararlarınızı kendi araştırmanıza dayanarak vermeniz önerilir.
 
 Geliştirici: Musab Duman
+```bash
+pip install -r requirements.txt
+
