@@ -1595,7 +1595,7 @@ async function analizEt() {
 
   try {
     // FastAPI'ye POST isteği atıyoruz
-    const res = await fetch(`${RENDER_API}/api/analyze`, {
+    const res = await fetch(`${RENDER_API}/api/quick-scan/${sembol}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1679,7 +1679,7 @@ async function bist30Tara() {
 
   for (let sembol of bist30) {
     try {
-      const res = await fetch(`${RENDER_API}/api/analyze`);
+      const res = await fetch(`${RENDER_API}/api/quick-scan/${sembol}`);
       if (res.ok) {
         const data = await res.json();
         
@@ -1743,7 +1743,7 @@ async function megaTara() {
 
     try {
       // FastAPI Quick-Scan endpoint'ine istek at
-      const res = await fetch(`${RENDER_API}/api/analyze`)
+      const res = await fetch(`${RENDER_API}/api/quick-scan/${sembol}`);
       if (res.ok) {
         const data = await res.json();
         
@@ -2165,7 +2165,7 @@ async function hesabiSil() {
     const res = await fetch(`${RENDER_API}/delete_account`, {
       method:  'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email: state.user.email, password: state.user.password })
+      body: JSON.stringify({ email: state.user.email, password: state.user.password, symbol: sembol })
     });
 
     if (res.ok) {
@@ -2217,7 +2217,7 @@ async function wlRender(loading = false) {
 
   // 1. Render Veritabanından Kullanıcının Listesini Çek
   try {
-    const dbRes = await fetch(`${RENDER_API}/get_watchlist/${state.user.email}`);
+    const dbRes = await fetch(`${RENDER_API}/get_watchlist/${state.user.email}?password=${encodeURIComponent(state.user.password)}`);
     if (dbRes.ok) {
       const data = await dbRes.json();
       state.watchlist = data.watchlist || [];
@@ -2291,9 +2291,9 @@ async function wlSil(sembol) {
   if (!state.user) return;
   
   try {
-    const res = await fetch(`${RENDER_API}/remove_watchlist/${state.user.email}/${sembol}`, {
-      method: 'DELETE'
-    });
+    fetch(`${RENDER_API}/remove_watchlist/${state.user.email}/${sembol}?password=${encodeURIComponent(state.user.password)}`, {
+    method: 'DELETE'
+    })
     
     if (res.ok) {
       toast(`${sembol} listeden çıkarıldı`);
