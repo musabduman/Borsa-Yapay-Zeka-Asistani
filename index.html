@@ -1595,12 +1595,12 @@ async function analizEt() {
 
   try {
     // FastAPI'ye POST isteği atıyoruz
-    const res = await fetch(`${RENDER_API}/api/quick-scan/${sembol}`, {
+    const res = await fetch(`${RENDER_API}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sembol: sembol,
-        gemini_key: state.apiKeys.gemini, // Gerçek projede state'den veya auth'dan gelecek
+        gemini_key: state.apiKeys.gemini,
         ollama_key: state.apiKeys.ollama
       })
     });
@@ -2241,7 +2241,7 @@ async function wlRender(loading = false) {
   // 2. Listedeki Her Hisse İçin Kendi FastAPI Sunucundan Analiz Çek
   for (let sembol of state.watchlist) {
     try {
-      const apiRes = await fetch(`${RENDER_API}/api/analyze`)
+      const apiRes = await fetch(`${RENDER_API}/api/quick-scan/${sembol}`)
       if (apiRes.ok) {
         const data = await apiRes.json();
         
